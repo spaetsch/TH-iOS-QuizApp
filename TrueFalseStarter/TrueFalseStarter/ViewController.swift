@@ -34,6 +34,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        trueButton.layer.cornerRadius = 8 // round button edges
+        falseButton.layer.cornerRadius = 8 // round button edges
+        playAgainButton.layer.cornerRadius = 8 // round button edges
+
+
         loadGameStartSound()
         // Start game
         playGameStartSound()
