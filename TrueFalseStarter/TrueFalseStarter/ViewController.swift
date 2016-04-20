@@ -21,36 +21,45 @@ class ViewController: UIViewController {
     
     struct TriviaFact {
         var question = String()
-        var answer = String()
-        
-//        var option1 = String()
-//        var option2 = String()
-//        var option3 = String()
-//        var option4 = String()
-//        var correctAnswer = Int
-
-
+        var option1 = String()
+        var option2 = String()
+        var option3 = String()
+        var option4 = String()
+        var correctAnswer = Int()
     }
     
+//    let quiz: [TriviaFact] = [
+//        TriviaFact(question: "Only female koalas can whistle", answer: "False"),
+//        TriviaFact(question: "Blue whales are technically whales", answer: "True"),
+//        TriviaFact(question: "Camels are cannibalistic", answer: "False"),
+//        TriviaFact(question: "All ducks are birds", answer: "True")
+//    ]
+    
     let quiz: [TriviaFact] = [
-        TriviaFact(question: "Only female koalas can whistle", answer: "False"),
-        TriviaFact(question: "Blue whales are technically whales", answer: "True"),
-        TriviaFact(question: "Camels are cannibalistic", answer: "False"),
-        TriviaFact(question: "All ducks are birds", answer: "True")
+        TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
+        TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", option4: "Vietnam", correctAnswer: 1 ),
+        TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3)
     ]
     
     @IBOutlet weak var questionField: UILabel!
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
+    
+    //@IBOutlet weak var option2Button: UIButton!
+    
+    @IBOutlet weak var option1Button: UIButton!
+    @IBOutlet weak var option2Button: UIButton!
+    @IBOutlet weak var option3Button: UIButton!
+    @IBOutlet weak var option4Button: UIButton!
+    
     @IBOutlet weak var playAgainButton: UIButton!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        trueButton.layer.cornerRadius = 8 // round button edges
-        falseButton.layer.cornerRadius = 8 // round button edges
-        playAgainButton.layer.cornerRadius = 8 // round button edges
+        option1Button.layer.cornerRadius = 8 // round button edges
+        option2Button.layer.cornerRadius = 8 // round button edges
+        option3Button.layer.cornerRadius = 8 // round button edges
+        option4Button.layer.cornerRadius = 8 // round button edges
 
+        playAgainButton.layer.cornerRadius = 8 // round button edges
 
         loadGameStartSound()
         // Start game
@@ -67,13 +76,19 @@ class ViewController: UIViewController {
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
         let currentFact = quiz[indexOfSelectedQuestion]
         questionField.text = currentFact.question
+        option1Button.setTitle(currentFact.option1, forState: UIControlState.Normal)
+        option2Button.setTitle(currentFact.option2, forState: UIControlState.Normal)
+        option3Button.setTitle(currentFact.option3, forState: UIControlState.Normal)
+        option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
         playAgainButton.hidden = true
     }
     
     func displayScore() {
         // Hide the answer buttons
-        trueButton.hidden = true
-        falseButton.hidden = true
+        option1Button.hidden = true
+        option2Button.hidden = true
+        option3Button.hidden = true
+        option4Button.hidden = true
         
         // Display play again button
         playAgainButton.hidden = false
@@ -87,14 +102,16 @@ class ViewController: UIViewController {
         questionsAsked += 1
         
         let selectedFact = quiz[indexOfSelectedQuestion]
-        let correctAnswer = selectedFact.answer
+        let correctAnswer = selectedFact.correctAnswer
+
         
-        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
-            correctQuestions += 1
-            questionField.text = "Correct!"
-        } else {
-            questionField.text = "Sorry, wrong answer!"
-        }
+       // replace with case switch
+//        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
+//            correctQuestions += 1
+//            questionField.text = "Correct!"
+//        } else {
+//            questionField.text = "Sorry, wrong answer!"
+//        }
         
         loadNextRoundWithDelay(seconds: 2)
     }
@@ -111,8 +128,10 @@ class ViewController: UIViewController {
     
     @IBAction func playAgain() {
         // Show the answer buttons
-        trueButton.hidden = false
-        falseButton.hidden = false
+        option1Button.hidden = false
+        option2Button.hidden = false
+        option3Button.hidden = false
+        option4Button.hidden = false
         
         questionsAsked = 0
         correctQuestions = 0

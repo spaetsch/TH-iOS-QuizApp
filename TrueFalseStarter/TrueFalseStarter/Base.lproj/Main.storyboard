@@ -32,7 +32,7 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="TN9-2Y-9Jc">
+                                    <stackView opaque="NO" contentMode="scaleToFill" misplaced="YES" axis="vertical" distribution="equalSpacing" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="TN9-2Y-9Jc">
                                         <rect key="frame" x="0.0" y="89" width="300" height="350"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1V-MS-ECi">
@@ -42,10 +42,7 @@
                                                     <constraint firstAttribute="height" constant="50" id="mA6-S5-2NH"/>
                                                 </constraints>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <state key="normal" title="True"/>
-                                                <connections>
-                                                    <action selector="checkAnswer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pHS-se-fli"/>
-                                                </connections>
+                                                <state key="normal" title="Option 1"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AS4-HX-g9f">
                                                 <rect key="frame" x="0.0" y="75" width="300" height="50"/>
@@ -55,7 +52,7 @@
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <state key="normal" title="False"/>
+                                                <state key="normal" title="Option 2"/>
                                                 <connections>
                                                     <action selector="checkAnswer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qfk-Z2-crr"/>
                                                 </connections>
@@ -68,7 +65,7 @@
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <state key="normal" title="Option C"/>
+                                                <state key="normal" title="Option 3"/>
                                                 <connections>
                                                     <action selector="checkAnswer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jfo-7h-FS3"/>
                                                 </connections>
@@ -81,7 +78,7 @@
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <state key="normal" title="Option D"/>
+                                                <state key="normal" title="Option 4"/>
                                                 <connections>
                                                     <action selector="checkAnswer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xfV-pX-3lO"/>
                                                 </connections>
@@ -122,10 +119,12 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="falseButton" destination="AS4-HX-g9f" id="Xfj-Ws-1ey"/>
+                        <outlet property="option1Button" destination="J1V-MS-ECi" id="cFu-Aw-IbQ"/>
+                        <outlet property="option2Button" destination="AS4-HX-g9f" id="7mU-uF-g7z"/>
+                        <outlet property="option3Button" destination="3aR-r6-Dyo" id="QGC-on-6zV"/>
+                        <outlet property="option4Button" destination="T9c-7o-KSV" id="DJS-Sp-3K0"/>
                         <outlet property="playAgainButton" destination="K17-uy-MvB" id="0Bx-Cm-ye0"/>
                         <outlet property="questionField" destination="I3V-ih-1Ky" id="7UI-o2-ATi"/>
-                        <outlet property="trueButton" destination="J1V-MS-ECi" id="iZW-hy-ROl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
