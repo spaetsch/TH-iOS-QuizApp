@@ -19,11 +19,16 @@ class ViewController: UIViewController {
     
     var gameSound: SystemSoundID = 0
     
-    let trivia: [[String : String]] = [
-        ["Question": "Only female koalas can whistle", "Answer": "False"],
-        ["Question": "Blue whales are technically whales", "Answer": "True"],
-        ["Question": "Camels are cannibalistic", "Answer": "False"],
-        ["Question": "All ducks are birds", "Answer": "True"]
+    struct TriviaFact {
+        var question = String()
+        var answer = String()
+    }
+    
+    let quiz: [TriviaFact] = [
+        TriviaFact(question: "QOnly female koalas can whistle", answer: "False"),
+        TriviaFact(question: "QBlue whales are technically whales", answer: "True"),
+        TriviaFact(question: "QCamels are cannibalistic", answer: "False"),
+        TriviaFact(question: "QAll ducks are birds", answer: "True")
     ]
     
     @IBOutlet weak var questionField: UILabel!
@@ -41,7 +46,7 @@ class ViewController: UIViewController {
 
         loadGameStartSound()
         // Start game
-        playGameStartSound()
+        //playGameStartSound() //ANNOYING
         displayQuestion()
     }
 
@@ -51,9 +56,9 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(trivia.count)
-        let questionDictionary = trivia[indexOfSelectedQuestion]
-        questionField.text = questionDictionary["Question"]
+        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
+        let currentFact = quiz[indexOfSelectedQuestion]
+        questionField.text = currentFact.question
         playAgainButton.hidden = true
     }
     
@@ -73,8 +78,8 @@ class ViewController: UIViewController {
         // Increment the questions asked counter
         questionsAsked += 1
         
-        let selectedQuestionDict = trivia[indexOfSelectedQuestion]
-        let correctAnswer = selectedQuestionDict["Answer"]
+        let selectedFact = quiz[indexOfSelectedQuestion]
+        let correctAnswer = selectedFact.answer
         
         if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
             correctQuestions += 1
