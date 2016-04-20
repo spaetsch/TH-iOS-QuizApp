@@ -22,13 +22,21 @@ class ViewController: UIViewController {
     struct TriviaFact {
         var question = String()
         var answer = String()
+        
+//        var option1 = String()
+//        var option2 = String()
+//        var option3 = String()
+//        var option4 = String()
+//        var correctAnswer = Int
+
+
     }
     
     let quiz: [TriviaFact] = [
-        TriviaFact(question: "QOnly female koalas can whistle", answer: "False"),
-        TriviaFact(question: "QBlue whales are technically whales", answer: "True"),
-        TriviaFact(question: "QCamels are cannibalistic", answer: "False"),
-        TriviaFact(question: "QAll ducks are birds", answer: "True")
+        TriviaFact(question: "Only female koalas can whistle", answer: "False"),
+        TriviaFact(question: "Blue whales are technically whales", answer: "True"),
+        TriviaFact(question: "Camels are cannibalistic", answer: "False"),
+        TriviaFact(question: "All ducks are birds", answer: "True")
     ]
     
     @IBOutlet weak var questionField: UILabel!
