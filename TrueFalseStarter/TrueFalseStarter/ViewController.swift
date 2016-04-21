@@ -28,13 +28,6 @@ class ViewController: UIViewController {
         var correctAnswer = Int()
     }
     
-//    let quiz: [TriviaFact] = [
-//        TriviaFact(question: "Only female koalas can whistle", answer: "False"),
-//        TriviaFact(question: "Blue whales are technically whales", answer: "True"),
-//        TriviaFact(question: "Camels are cannibalistic", answer: "False"),
-//        TriviaFact(question: "All ducks are birds", answer: "True")
-//    ]
-    
     let quiz: [TriviaFact] = [
         TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
         TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", option4: "Vietnam", correctAnswer: 1 ),
@@ -42,8 +35,7 @@ class ViewController: UIViewController {
     ]
     
     @IBOutlet weak var questionField: UILabel!
-    
-    //@IBOutlet weak var option2Button: UIButton!
+    @IBOutlet weak var feedbackField: UILabel!
     
     @IBOutlet weak var option1Button: UIButton!
     @IBOutlet weak var option2Button: UIButton!
@@ -58,7 +50,6 @@ class ViewController: UIViewController {
         option2Button.layer.cornerRadius = 8 // round button edges
         option3Button.layer.cornerRadius = 8 // round button edges
         option4Button.layer.cornerRadius = 8 // round button edges
-
         playAgainButton.layer.cornerRadius = 8 // round button edges
 
         loadGameStartSound()
@@ -75,15 +66,21 @@ class ViewController: UIViewController {
     func displayQuestion() {
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
         let currentFact = quiz[indexOfSelectedQuestion]
+        
         questionField.text = currentFact.question
+        
         option1Button.setTitle(currentFact.option1, forState: UIControlState.Normal)
         option2Button.setTitle(currentFact.option2, forState: UIControlState.Normal)
         option3Button.setTitle(currentFact.option3, forState: UIControlState.Normal)
         option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
+        
+        feedbackField.hidden = true
         playAgainButton.hidden = true
     }
     
     func displayScore() {
+        
+        feedbackField.hidden = true
         // Hide the answer buttons
         option1Button.hidden = true
         option2Button.hidden = true
@@ -104,14 +101,15 @@ class ViewController: UIViewController {
         let selectedFact = quiz[indexOfSelectedQuestion]
         let correctAnswer = selectedFact.correctAnswer
 
-        
-       // replace with case switch
-//        if (sender === trueButton &&  correctAnswer == "True") || (sender === falseButton && correctAnswer == "False") {
-//            correctQuestions += 1
-//            questionField.text = "Correct!"
-//        } else {
-//            questionField.text = "Sorry, wrong answer!"
-//        }
+        if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
+            correctQuestions += 1
+            feedbackField.hidden = false
+            feedbackField.text = "Correct!"
+
+        } else {
+            feedbackField.hidden = false
+            feedbackField.text = "Sorry, wrong answer!"
+        }
         
         loadNextRoundWithDelay(seconds: 2)
     }
