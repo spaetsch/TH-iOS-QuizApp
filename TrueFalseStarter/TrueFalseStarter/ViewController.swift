@@ -110,7 +110,18 @@ class ViewController: UIViewController {
         } else {
             feedbackField.hidden = false
             feedbackField.textColor = UIColor.orangeColor()
-            feedbackField.text = "Sorry, wrong answer!"
+            switch correctAnswer{
+                case 1:
+                    feedbackField.text = "Sorry! \(selectedFact.option1) is the correct answer."
+                case 2:
+                    feedbackField.text = "Sorry! \(selectedFact.option2) is the correct answer."
+                case 3:
+                    feedbackField.text = "Sorry! \(selectedFact.option3) is the correct answer."
+                case 4:
+                    feedbackField.text = "Sorry! \(selectedFact.option4) is the correct answer."
+                default:
+                    feedbackField.text = "Sorry, wrong answer!"
+            }
         }
         
         loadNextRoundWithDelay(seconds: 1)

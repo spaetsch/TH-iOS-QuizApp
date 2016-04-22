@@ -29,12 +29,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSb-tJ-6mM" userLabel="Feedback">
-                                <rect key="frame" x="150" y="134.5" width="300" height="19.5"/>
+                                <rect key="frame" x="150" y="110" width="300" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Aif-t0-y4v"/>
-                                    <constraint firstAttribute="height" constant="20" id="Vea-0F-HWe"/>
+                                    <constraint firstAttribute="height" constant="50" id="Vea-0F-HWe"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -115,7 +115,7 @@
                         <color key="backgroundColor" red="0.031372549019607843" green="0.16862745098039217" blue="0.24313725490196078" alpha="1" colorSpace="calibratedRGB"/>
                         <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                         <constraints>
-                            <constraint firstItem="kSb-tJ-6mM" firstAttribute="top" secondItem="I3V-ih-1Ky" secondAttribute="bottom" constant="25" id="73D-sM-z6E"/>
+                            <constraint firstItem="kSb-tJ-6mM" firstAttribute="top" secondItem="I3V-ih-1Ky" secondAttribute="bottom" id="73D-sM-z6E"/>
                             <constraint firstItem="TN9-2Y-9Jc" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="150" id="Dbl-8H-P5C"/>
                             <constraint firstItem="TN9-2Y-9Jc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LLU-3f-bG9"/>
                             <constraint firstItem="K17-uy-MvB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bEn-iu-tLF"/>
