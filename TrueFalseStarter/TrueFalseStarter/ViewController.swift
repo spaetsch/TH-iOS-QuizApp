@@ -19,18 +19,34 @@ class ViewController: UIViewController {
     
     var gameSound: SystemSoundID = 0
     
-    struct TriviaFact {
-        var question = String()
-        var option1 = String()
-        var option2 = String()
-        var option3 = String()
-        var option4 = String()
-        var correctAnswer = Int()
+    class TriviaFact {
+        var question: String
+        var option1: String
+        var option2: String
+        var option3: String
+        var option4: String?
+        var correctAnswer: Int
+        
+        init(question: String, option1: String, option2: String, option3: String, correctAnswer: Int){
+            self.question = question
+            self.option1 = option1
+            self.option2 = option2
+            self.option3 = option3
+            self.correctAnswer = correctAnswer
+        }
+        init(question: String, option1: String, option2: String, option3: String, option4: String, correctAnswer: Int){
+            self.question = question
+            self.option1 = option1
+            self.option2 = option2
+            self.option3 = option3
+            self.option4 = option4
+            self.correctAnswer = correctAnswer
+        }
     }
     
     let quiz: [TriviaFact] = [
         TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
-        TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", option4: "Vietnam", correctAnswer: 1 ),
+        TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", correctAnswer: 1),
         TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3)
     ]
     
@@ -72,8 +88,13 @@ class ViewController: UIViewController {
         option1Button.setTitle(currentFact.option1, forState: UIControlState.Normal)
         option2Button.setTitle(currentFact.option2, forState: UIControlState.Normal)
         option3Button.setTitle(currentFact.option3, forState: UIControlState.Normal)
-        option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
         
+        if currentFact.option4 == nil {
+            option4Button.hidden = true
+        } else {
+            option4Button.hidden = false
+            option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
+        }
         feedbackField.hidden = true
         playAgainButton.hidden = true
     }
@@ -91,7 +112,6 @@ class ViewController: UIViewController {
         playAgainButton.hidden = false
         
         questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
-        
     }
     
     @IBAction func checkAnswer(sender: UIButton) {
