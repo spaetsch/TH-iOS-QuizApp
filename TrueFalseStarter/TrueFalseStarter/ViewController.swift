@@ -47,10 +47,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         option1Button.layer.cornerRadius = 8 // round button edges
-        option2Button.layer.cornerRadius = 8 // round button edges
-        option3Button.layer.cornerRadius = 8 // round button edges
-        option4Button.layer.cornerRadius = 8 // round button edges
-        playAgainButton.layer.cornerRadius = 8 // round button edges
+        option2Button.layer.cornerRadius = 8
+        option3Button.layer.cornerRadius = 8
+        option4Button.layer.cornerRadius = 8
+        playAgainButton.layer.cornerRadius = 8
 
         loadGameStartSound()
         // Start game
@@ -104,14 +104,16 @@ class ViewController: UIViewController {
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
             feedbackField.hidden = false
+            feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
 
         } else {
             feedbackField.hidden = false
+            feedbackField.textColor = UIColor.orangeColor()
             feedbackField.text = "Sorry, wrong answer!"
         }
         
-        loadNextRoundWithDelay(seconds: 2)
+        loadNextRoundWithDelay(seconds: 1)
     }
     
     func nextRound() {

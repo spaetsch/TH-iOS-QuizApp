@@ -19,22 +19,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Sample Question" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-ih-1Ky">
-                                <rect key="frame" x="150" y="25" width="300" height="60"/>
+                                <rect key="frame" x="150" y="50" width="300" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="85H-l1-qcl"/>
-                                    <constraint firstAttribute="width" constant="300" id="V1a-og-rZb"/>
+                                    <constraint firstAttribute="width" constant="300" id="Kgf-us-ae0"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSb-tJ-6mM" userLabel="Feedback">
-                                <rect key="frame" x="150" y="109.5" width="300" height="19.5"/>
+                                <rect key="frame" x="150" y="134.5" width="300" height="19.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Aif-t0-y4v"/>
                                     <constraint firstAttribute="height" constant="20" id="Vea-0F-HWe"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -98,7 +98,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K17-uy-MvB">
-                                <rect key="frame" x="150" y="160" width="300" height="50"/>
+                                <rect key="frame" x="150" y="185" width="300" height="50"/>
                                 <color key="backgroundColor" red="0.0" green="0.57647058823529407" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="LyE-2g-MDv"/>
@@ -118,10 +118,10 @@
                             <constraint firstItem="kSb-tJ-6mM" firstAttribute="top" secondItem="I3V-ih-1Ky" secondAttribute="bottom" constant="25" id="73D-sM-z6E"/>
                             <constraint firstItem="TN9-2Y-9Jc" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="150" id="Dbl-8H-P5C"/>
                             <constraint firstItem="TN9-2Y-9Jc" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="LLU-3f-bG9"/>
-                            <constraint firstItem="I3V-ih-1Ky" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZIR-mo-Fwt"/>
                             <constraint firstItem="K17-uy-MvB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bEn-iu-tLF"/>
                             <constraint firstItem="K17-uy-MvB" firstAttribute="top" secondItem="I3V-ih-1Ky" secondAttribute="bottom" constant="75" id="ci6-Pq-UYV"/>
-                            <constraint firstItem="I3V-ih-1Ky" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="25" id="oW4-nX-tvC"/>
+                            <constraint firstItem="I3V-ih-1Ky" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="hqv-s4-qAg"/>
+                            <constraint firstItem="I3V-ih-1Ky" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="50" id="oW4-nX-tvC"/>
                             <constraint firstItem="kSb-tJ-6mM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x8Y-50-DG3"/>
                         </constraints>
                     </view>
