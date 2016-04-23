@@ -58,6 +58,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var option3Button: UIButton!
     @IBOutlet weak var option4Button: UIButton!
     
+    
+    @IBOutlet weak var option4Height: NSLayoutConstraint!
+    
     @IBOutlet weak var playAgainButton: UIButton!
     
     override func viewDidLoad() {
@@ -91,8 +94,10 @@ class ViewController: UIViewController {
         
         if currentFact.option4 == nil {
             option4Button.hidden = true
+            //option4Height.constant = 0
         } else {
             option4Button.hidden = false
+            //option4Height.constant = 50
             option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
         }
         feedbackField.hidden = true
