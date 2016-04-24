@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
     
-    
+    var timer = NSTimer()
     
     var gameSound: SystemSoundID = 0
     
@@ -121,6 +121,8 @@ class ViewController: UIViewController {
 //        nextButton.enabled = false
         
         enableChoices()
+        timer = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(timesUp), userInfo: nil, repeats: true)
+
 
     }
     
@@ -255,6 +257,10 @@ class ViewController: UIViewController {
         option4Button.enabled = true
         
         nextButton.enabled = false
+    }
+    
+    func timesUp(){
+        disableChoices()
     }
     
     func loadGameStartSound() {
