@@ -13,9 +13,12 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     let questionsPerRound = 4
+    let timeLimit = 15
+    
     var questionsAsked = 0
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
+    var timerCounter: Int = 0
     
     var timer = NSTimer()
     
@@ -61,6 +64,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
     
+    @IBOutlet weak var countdownLabel: UILabel!
+    
     @IBOutlet weak var option1Button: UIButton!
     @IBOutlet weak var option2Button: UIButton!
     @IBOutlet weak var option3Button: UIButton!
@@ -99,6 +104,10 @@ class ViewController: UIViewController {
         // this iterates thru the array and guarantees the same question will not be asked more than once in a given playthru
         let currentFact = shuffled[questionsAsked]
         
+        timerCounter = timeLimit
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        
+        countdownLabel.text = String(timerCounter)
         questionField.text = currentFact.question
         
         option1Button.setTitle(currentFact.option1, forState: UIControlState.Normal)
@@ -113,17 +122,7 @@ class ViewController: UIViewController {
         }
         feedbackField.hidden = true
         playAgainButton.hidden = true
-        
-//        option1Button.enabled = true
-//        option2Button.enabled = true
-//        option3Button.enabled = true
-//        option4Button.enabled = true
-//        nextButton.enabled = false
-        
         enableChoices()
-        timer = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(timesUp), userInfo: nil, repeats: true)
-
-
     }
     
     func displayScore() {
@@ -151,6 +150,8 @@ class ViewController: UIViewController {
         // Increment the questions asked counter AFTER getting the selectedFact
         questionsAsked += 1
 
+        stopTimer()
+        
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
             feedbackField.hidden = false
@@ -174,13 +175,6 @@ class ViewController: UIViewController {
         }
         
         //loadNextRoundWithDelay(seconds: 1)
-        //set next question to active
-//        nextButton.enabled = true
-//        
-//        option1Button.enabled = false
-//        option2Button.enabled = false
-//        option3Button.enabled = false
-//        option4Button.enabled = false
         
         disableChoices()
         
@@ -259,8 +253,20 @@ class ViewController: UIViewController {
         nextButton.enabled = false
     }
     
-    func timesUp(){
-        disableChoices()
+    func updateCounter(){
+        timerCounter -= 1
+        if timerCounter == 0 {
+            countdownLabel.text = "Time's up!"
+            stopTimer()
+            disableChoices()
+            questionsAsked += 1
+        } else {
+            countdownLabel.text = String(timerCounter)
+        }
+    }
+    func stopTimer(){
+        timer.invalidate()
+        timerCounter = timeLimit
     }
     
     func loadGameStartSound() {
