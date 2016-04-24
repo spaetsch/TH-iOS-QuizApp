@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var correctQuestions = 0
     var indexOfSelectedQuestion: Int = 0
     
+    
+    
     var gameSound: SystemSoundID = 0
     
     var shuffled: [TriviaFact] = []
@@ -112,19 +114,20 @@ class ViewController: UIViewController {
         feedbackField.hidden = true
         playAgainButton.hidden = true
         
+//        option1Button.enabled = true
+//        option2Button.enabled = true
+//        option3Button.enabled = true
+//        option4Button.enabled = true
+//        nextButton.enabled = false
         
-        option1Button.enabled = true
-        option2Button.enabled = true
-        option3Button.enabled = true
-        option4Button.enabled = true
-        nextButton.enabled = false
+        enableChoices()
 
     }
     
     func displayScore() {
         
+        //hide feedback field and game buttons
         feedbackField.hidden = true
-        // Hide the answer buttons
         option1Button.hidden = true
         option2Button.hidden = true
         option3Button.hidden = true
@@ -142,16 +145,15 @@ class ViewController: UIViewController {
         // selectedFact is at the index equal to number of questions already asked
         let selectedFact = shuffled[questionsAsked]
         let correctAnswer = selectedFact.correctAnswer
+
         // Increment the questions asked counter AFTER getting the selectedFact
         questionsAsked += 1
-
 
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
             feedbackField.hidden = false
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
-
         } else {
             feedbackField.hidden = false
             feedbackField.textColor = UIColor.orangeColor()
@@ -171,13 +173,14 @@ class ViewController: UIViewController {
         
         //loadNextRoundWithDelay(seconds: 1)
         //set next question to active
-        nextButton.enabled = true
+//        nextButton.enabled = true
+//        
+//        option1Button.enabled = false
+//        option2Button.enabled = false
+//        option3Button.enabled = false
+//        option4Button.enabled = false
         
-        option1Button.enabled = false
-        option2Button.enabled = false
-        option3Button.enabled = false
-        option4Button.enabled = false
-
+        disableChoices()
         
     }
     
@@ -234,6 +237,25 @@ class ViewController: UIViewController {
 //            self.nextRound()
 //        }
 //    }
+    
+
+    func disableChoices(){
+        option1Button.enabled = false
+        option2Button.enabled = false
+        option3Button.enabled = false
+        option4Button.enabled = false
+        
+        nextButton.enabled = true
+    }
+    
+    func enableChoices(){
+        option1Button.enabled = true
+        option2Button.enabled = true
+        option3Button.enabled = true
+        option4Button.enabled = true
+        
+        nextButton.enabled = false
+    }
     
     func loadGameStartSound() {
         let pathToSoundFile = NSBundle.mainBundle().pathForResource("GameSound", ofType: "wav")
