@@ -110,6 +110,9 @@ class ViewController: UIViewController {
         countdownLabel.text = String(timerCounter)
         questionField.text = currentFact.question
         
+        feedbackField.hidden = false
+        countdownLabel.hidden = false
+        
         option1Button.setTitle(currentFact.option1, forState: UIControlState.Normal)
         option2Button.setTitle(currentFact.option2, forState: UIControlState.Normal)
         option3Button.setTitle(currentFact.option3, forState: UIControlState.Normal)
@@ -120,7 +123,9 @@ class ViewController: UIViewController {
             option4Button.hidden = false
             option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
         }
-        feedbackField.hidden = true
+        //feedbackField.hidden = true
+        feedbackField.textColor = UIColor.whiteColor()
+        feedbackField.text = "Time left:"
         playAgainButton.hidden = true
         enableChoices()
     }
@@ -129,6 +134,8 @@ class ViewController: UIViewController {
         
         //hide feedback field and game buttons
         feedbackField.hidden = true
+        countdownLabel.hidden = true
+        
         option1Button.hidden = true
         option2Button.hidden = true
         option3Button.hidden = true
@@ -154,11 +161,11 @@ class ViewController: UIViewController {
         
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
-            feedbackField.hidden = false
+            //feedbackField.hidden = false
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
         } else {
-            feedbackField.hidden = false
+            //feedbackField.hidden = false
             feedbackField.textColor = UIColor.orangeColor()
             switch correctAnswer{
                 case 1:
@@ -255,17 +262,21 @@ class ViewController: UIViewController {
     
     func updateCounter(){
         timerCounter -= 1
+        countdownLabel.text = String(timerCounter)
+
         if timerCounter == 0 {
-            countdownLabel.text = "Time's up!"
+            feedbackField.text = "Time's up!"
             stopTimer()
             disableChoices()
             questionsAsked += 1
-        } else {
-            countdownLabel.text = String(timerCounter)
+        } else if timerCounter <= 5 {
+            countdownLabel.textColor = UIColor.redColor()
         }
+    
     }
     func stopTimer(){
         timer.invalidate()
+        countdownLabel.textColor = UIColor.whiteColor()
         timerCounter = timeLimit
     }
     
