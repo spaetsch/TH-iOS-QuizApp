@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     var gameSound: SystemSoundID = 0
     
+    var shuffled: [TriviaFact] = []
+    
     class TriviaFact {
         var question: String
         var option1: String
@@ -47,8 +49,15 @@ class ViewController: UIViewController {
     let quiz: [TriviaFact] = [
         TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
         TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", correctAnswer: 1),
-        TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3)
+        TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3),
+        
+        TriviaFact(question:"The Titanic departed from the United Kingdom, where was it supposed to arrive?", option1: "Paris", option2: "Washington D.C.", option3: "New York City", option4:"Boston", correctAnswer: 3),
+        TriviaFact(question:"Which nation produces the most oil?", option1:"Iran", option2:"Iraq", option3:"Brazil", option4: "Canada", correctAnswer: 4),
+        TriviaFact(question:"Which country has most recently won consecutive World Cups in Soccer?", option1: "Italy", option2: "Brazil", option3: "Argentina", correctAnswer: 2),
+        TriviaFact(question:"Which of the following rivers is longest?", option1:"Yangtze", option2:"Mississippi", option3:"Congo", option4: "Mekong", correctAnswer: 2)
     ]
+    
+
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
@@ -71,6 +80,12 @@ class ViewController: UIViewController {
         loadGameStartSound()
         // Start game
         //playGameStartSound() //ANNOYING
+        
+        shuffled = shuffleQuiz(quiz)
+        print(shuffled[0].question)
+        print(shuffled[1].question)
+        print(shuffled[2].question)
+
         displayQuestion()
     }
 
@@ -80,8 +95,10 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-        indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
-        let currentFact = quiz[indexOfSelectedQuestion]
+       // indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
+        
+        
+        let currentFact = shuffled[questionsAsked]
         
         questionField.text = currentFact.question
         
@@ -116,10 +133,12 @@ class ViewController: UIViewController {
     
     @IBAction func checkAnswer(sender: UIButton) {
         // Increment the questions asked counter
-        questionsAsked += 1
         
-        let selectedFact = quiz[indexOfSelectedQuestion]
+        let selectedFact = shuffled[questionsAsked] //quiz[indexOfSelectedQuestion]
         let correctAnswer = selectedFact.correctAnswer
+
+        questionsAsked += 1
+
 
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
@@ -166,6 +185,7 @@ class ViewController: UIViewController {
         
         questionsAsked = 0
         correctQuestions = 0
+        shuffled = shuffleQuiz(quiz)
         nextRound()
     }
     
@@ -193,6 +213,10 @@ class ViewController: UIViewController {
     
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
+    }
+    
+    func shuffleQuiz(original: [TriviaFact]) -> [TriviaFact]{
+        return GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original) as! [TriviaFact]
     }
 }
 
