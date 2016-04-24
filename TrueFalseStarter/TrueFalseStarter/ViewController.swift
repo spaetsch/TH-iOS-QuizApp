@@ -111,6 +111,14 @@ class ViewController: UIViewController {
         }
         feedbackField.hidden = true
         playAgainButton.hidden = true
+        
+        
+        option1Button.enabled = true
+        option2Button.enabled = true
+        option3Button.enabled = true
+        option4Button.enabled = true
+        nextButton.enabled = false
+
     }
     
     func displayScore() {
@@ -121,6 +129,7 @@ class ViewController: UIViewController {
         option2Button.hidden = true
         option3Button.hidden = true
         option4Button.hidden = true
+        nextButton.hidden = true
         
         // Display play again button
         playAgainButton.hidden = false
@@ -164,6 +173,12 @@ class ViewController: UIViewController {
         //set next question to active
         nextButton.enabled = true
         
+        option1Button.enabled = false
+        option2Button.enabled = false
+        option3Button.enabled = false
+        option4Button.enabled = false
+
+        
     }
     
     @IBAction func nextRound(sender: AnyObject) {
@@ -193,6 +208,7 @@ class ViewController: UIViewController {
         option2Button.hidden = false
         option3Button.hidden = false
         option4Button.hidden = false
+        nextButton.hidden = false
         
         // reset counts for questionsAsked and correctQuestions
         questionsAsked = 0
