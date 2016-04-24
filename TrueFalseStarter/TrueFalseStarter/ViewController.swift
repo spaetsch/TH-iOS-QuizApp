@@ -160,10 +160,24 @@ class ViewController: UIViewController {
             }
         }
         
-        loadNextRoundWithDelay(seconds: 1)
+        //loadNextRoundWithDelay(seconds: 1)
+        //set next question to active
+        nextButton.enabled = true
+        
     }
     
-    func nextRound() {
+    @IBAction func nextRound(sender: AnyObject) {
+        nextButton.enabled = false
+        if questionsAsked == questionsPerRound {
+            // Game is over
+            displayScore()
+        } else {
+            // Continue game
+            displayQuestion()
+        }
+    }
+    func newGame() {
+        nextButton.enabled = false
         if questionsAsked == questionsPerRound {
             // Game is over
             displayScore()
@@ -180,29 +194,30 @@ class ViewController: UIViewController {
         option3Button.hidden = false
         option4Button.hidden = false
         
+        // reset counts for questionsAsked and correctQuestions
         questionsAsked = 0
         correctQuestions = 0
-        // after resetting counts for questionsAsked and correctQuestions
+        
         // create a new randomly shuffled array so the player will not get the same series of questions
         shuffled = shuffleQuiz(quiz)
-        nextRound()
+        newGame()
     }
     
 
     
     // MARK: Helper Methods
     
-    func loadNextRoundWithDelay(seconds seconds: Int) {
-        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
-        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
-        // Calculates a time value to execute the method given current time and delay
-        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, delay)
-        
-        // Executes the nextRound method at the dispatch time on the main queue
-        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
-            self.nextRound()
-        }
-    }
+//    func loadNextRoundWithDelay(seconds seconds: Int) {
+//        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
+//        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
+//        // Calculates a time value to execute the method given current time and delay
+//        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, delay)
+//        
+//        // Executes the nextRound method at the dispatch time on the main queue
+//        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
+//            self.nextRound()
+//        }
+//    }
     
     func loadGameStartSound() {
         let pathToSoundFile = NSBundle.mainBundle().pathForResource("GameSound", ofType: "wav")
