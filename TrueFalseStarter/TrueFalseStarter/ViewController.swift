@@ -50,14 +50,11 @@ class ViewController: UIViewController {
         TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
         TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", correctAnswer: 1),
         TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3),
-        
         TriviaFact(question:"The Titanic departed from the United Kingdom, where was it supposed to arrive?", option1: "Paris", option2: "Washington D.C.", option3: "New York City", option4:"Boston", correctAnswer: 3),
         TriviaFact(question:"Which nation produces the most oil?", option1:"Iran", option2:"Iraq", option3:"Brazil", option4: "Canada", correctAnswer: 4),
         TriviaFact(question:"Which country has most recently won consecutive World Cups in Soccer?", option1: "Italy", option2: "Brazil", option3: "Argentina", correctAnswer: 2),
         TriviaFact(question:"Which of the following rivers is longest?", option1:"Yangtze", option2:"Mississippi", option3:"Congo", option4: "Mekong", correctAnswer: 2)
     ]
-    
-
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
@@ -67,6 +64,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var option3Button: UIButton!
     @IBOutlet weak var option4Button: UIButton!
     
+    @IBOutlet weak var nextButton: UIButton!
+    
     @IBOutlet weak var playAgainButton: UIButton!
     
     override func viewDidLoad() {
@@ -75,17 +74,16 @@ class ViewController: UIViewController {
         option2Button.layer.cornerRadius = 8
         option3Button.layer.cornerRadius = 8
         option4Button.layer.cornerRadius = 8
+        nextButton.layer.cornerRadius = 8
+
         playAgainButton.layer.cornerRadius = 8
 
         loadGameStartSound()
         // Start game
         //playGameStartSound() //ANNOYING
         
+        //shuffles trivia array to guarantee the same question will not be asked more than once in a given playthru
         shuffled = shuffleQuiz(quiz)
-        print(shuffled[0].question)
-        print(shuffled[1].question)
-        print(shuffled[2].question)
-
         displayQuestion()
     }
 
@@ -95,9 +93,8 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-       // indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextIntWithUpperBound(quiz.count)
-        
-        
+        // currentFact is selected from randomly shuffled array at the index equal to number of questions already asked
+        // this iterates thru the array and guarantees the same question will not be asked more than once in a given playthru
         let currentFact = shuffled[questionsAsked]
         
         questionField.text = currentFact.question
@@ -132,11 +129,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func checkAnswer(sender: UIButton) {
-        // Increment the questions asked counter
         
-        let selectedFact = shuffled[questionsAsked] //quiz[indexOfSelectedQuestion]
+        // selectedFact is at the index equal to number of questions already asked
+        let selectedFact = shuffled[questionsAsked]
         let correctAnswer = selectedFact.correctAnswer
-
+        // Increment the questions asked counter AFTER getting the selectedFact
         questionsAsked += 1
 
 
@@ -157,7 +154,7 @@ class ViewController: UIViewController {
                 case 3:
                     feedbackField.text = "Sorry! \(selectedFact.option3) is the correct answer."
                 case 4:
-                    feedbackField.text = "Sorry! \(selectedFact.option4) is the correct answer."
+                    feedbackField.text = "Sorry! \(selectedFact.option4!) is the correct answer."
                 default:
                     feedbackField.text = "Sorry, wrong answer!"
             }
@@ -185,6 +182,8 @@ class ViewController: UIViewController {
         
         questionsAsked = 0
         correctQuestions = 0
+        // after resetting counts for questionsAsked and correctQuestions
+        // create a new randomly shuffled array so the player will not get the same series of questions
         shuffled = shuffleQuiz(quiz)
         nextRound()
     }
@@ -215,6 +214,8 @@ class ViewController: UIViewController {
         AudioServicesPlaySystemSound(gameSound)
     }
     
+    // takes the original array of trivia questions, returns a randomly shuffled array
+    // guarantees no question will be repeated in a given playthru
     func shuffleQuiz(original: [TriviaFact]) -> [TriviaFact]{
         return GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original) as! [TriviaFact]
     }
