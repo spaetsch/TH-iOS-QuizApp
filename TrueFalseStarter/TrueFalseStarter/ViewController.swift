@@ -13,7 +13,7 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     let questionsPerRound = 4
-    let timeLimit = 15
+    let timeLimit = 15 // number of seconds
     
     var questionsAsked = 0
     var correctQuestions = 0
@@ -63,16 +63,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
-    
     @IBOutlet weak var countdownLabel: UILabel!
     
     @IBOutlet weak var option1Button: UIButton!
     @IBOutlet weak var option2Button: UIButton!
     @IBOutlet weak var option3Button: UIButton!
     @IBOutlet weak var option4Button: UIButton!
-    
     @IBOutlet weak var nextButton: UIButton!
-    
     @IBOutlet weak var playAgainButton: UIButton!
     
     override func viewDidLoad() {
@@ -82,7 +79,6 @@ class ViewController: UIViewController {
         option3Button.layer.cornerRadius = 8
         option4Button.layer.cornerRadius = 8
         nextButton.layer.cornerRadius = 8
-
         playAgainButton.layer.cornerRadius = 8
 
         loadGameStartSound()
@@ -100,8 +96,8 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-        // currentFact is selected from randomly shuffled array at the index equal to number of questions already asked
-        // this iterates thru the array and guarantees the same question will not be asked more than once in a given playthru
+        // Selects currentFact from randomly shuffled array at the index equal to number of questions already asked
+        // Iterates thru the array and guarantees the same question will not be asked more than once in a given playthru
         let currentFact = shuffled[questionsAsked]
         
         timerCounter = timeLimit
@@ -117,32 +113,31 @@ class ViewController: UIViewController {
         option2Button.setTitle(currentFact.option2, forState: UIControlState.Normal)
         option3Button.setTitle(currentFact.option3, forState: UIControlState.Normal)
         
+        // If there is not a fourth answer option, hide the button; otherwise set label and display
         if currentFact.option4 == nil {
             option4Button.hidden = true
         } else {
             option4Button.hidden = false
             option4Button.setTitle(currentFact.option4, forState: UIControlState.Normal)
         }
-        //feedbackField.hidden = true
         feedbackField.textColor = UIColor.whiteColor()
         feedbackField.text = "Time left:"
         playAgainButton.hidden = true
-        enableChoices()
+        enableOptions(true)
     }
     
     func displayScore() {
         
-        //hide feedback field and game buttons
+        //Hide feedback and countdown fields and game buttons
         feedbackField.hidden = true
         countdownLabel.hidden = true
-        
         option1Button.hidden = true
         option2Button.hidden = true
         option3Button.hidden = true
         option4Button.hidden = true
         nextButton.hidden = true
         
-        // Display play again button
+        // Display play again button and total score
         playAgainButton.hidden = false
         
         questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
@@ -161,11 +156,9 @@ class ViewController: UIViewController {
         
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
-            //feedbackField.hidden = false
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
         } else {
-            //feedbackField.hidden = false
             feedbackField.textColor = UIColor.orangeColor()
             switch correctAnswer{
                 case 1:
@@ -180,11 +173,7 @@ class ViewController: UIViewController {
                     feedbackField.text = "Sorry, wrong answer!"
             }
         }
-        
-        //loadNextRoundWithDelay(seconds: 1)
-        
-        disableChoices()
-        
+        enableOptions(false)
     }
     
     @IBAction func nextRound(sender: AnyObject) {
@@ -197,83 +186,69 @@ class ViewController: UIViewController {
             displayQuestion()
         }
     }
-    func newGame() {
-        nextButton.enabled = false
-        if questionsAsked == questionsPerRound {
-            // Game is over
-            displayScore()
-        } else {
-            // Continue game
-            displayQuestion()
-        }
-    }
     
     @IBAction func playAgain() {
-        // Show the answer buttons
+        // Show answer buttons
         option1Button.hidden = false
         option2Button.hidden = false
         option3Button.hidden = false
         option4Button.hidden = false
         nextButton.hidden = false
         
-        // reset counts for questionsAsked and correctQuestions
+        // Reset counts for questionsAsked and correctQuestions
         questionsAsked = 0
         correctQuestions = 0
         
-        // create a new randomly shuffled array so the player will not get the same series of questions
+        // Create a new randomly shuffled array so the player will not get the same series of questions
         shuffled = shuffleQuiz(quiz)
-        newGame()
+        nextRound(self)
     }
-    
-
     
     // MARK: Helper Methods
     
-//    func loadNextRoundWithDelay(seconds seconds: Int) {
-//        // Converts a delay in seconds to nanoseconds as signed 64 bit integer
-//        let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
-//        // Calculates a time value to execute the method given current time and delay
-//        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, delay)
-//        
-//        // Executes the nextRound method at the dispatch time on the main queue
-//        dispatch_after(dispatchTime, dispatch_get_main_queue()) {
-//            self.nextRound()
-//        }
-//    }
-    
+    // Takes the original array of trivia questions, returns a randomly shuffled array
+    // Guarantees no question will be repeated in a given playthru
+    func shuffleQuiz(original: [TriviaFact]) -> [TriviaFact]{
+        return GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original) as! [TriviaFact]
+    }
 
-    func disableChoices(){
-        option1Button.enabled = false
-        option2Button.enabled = false
-        option3Button.enabled = false
-        option4Button.enabled = false
-        
-        nextButton.enabled = true
+    // Toggles between the states where
+    // options are enabled and nextButton is disabled vs. options disabled and nextButton enabled
+    func enableOptions(toggle: Bool) {
+        if toggle {
+            option1Button.enabled = true
+            option2Button.enabled = true
+            option3Button.enabled = true
+            option4Button.enabled = true
+            nextButton.enabled = false
+        } else {
+            option1Button.enabled = false
+            option2Button.enabled = false
+            option3Button.enabled = false
+            option4Button.enabled = false
+            nextButton.enabled = true
+        }
     }
     
-    func enableChoices(){
-        option1Button.enabled = true
-        option2Button.enabled = true
-        option3Button.enabled = true
-        option4Button.enabled = true
-        
-        nextButton.enabled = false
-    }
-    
+    // Decrements the timer counter and displays to countdownLabel
+    // Changes countdown color to red when less than 5 sec remain
+    // Stops the timer if it reaches zero, increments questionsAsked, and enables nextQuestion
     func updateCounter(){
         timerCounter -= 1
         countdownLabel.text = String(timerCounter)
 
         if timerCounter == 0 {
             feedbackField.text = "Time's up!"
-            stopTimer()
-            disableChoices()
             questionsAsked += 1
+            stopTimer()
+            enableOptions(false)
         } else if timerCounter <= 5 {
             countdownLabel.textColor = UIColor.redColor()
         }
     
     }
+    
+    // Stops the timer, resets color to white, resets timerCounter to full time
     func stopTimer(){
         timer.invalidate()
         countdownLabel.textColor = UIColor.whiteColor()
@@ -289,11 +264,6 @@ class ViewController: UIViewController {
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
-    
-    // takes the original array of trivia questions, returns a randomly shuffled array
-    // guarantees no question will be repeated in a given playthru
-    func shuffleQuiz(original: [TriviaFact]) -> [TriviaFact]{
-        return GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original) as! [TriviaFact]
-    }
+
 }
 
