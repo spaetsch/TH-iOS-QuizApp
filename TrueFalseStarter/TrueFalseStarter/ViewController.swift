@@ -22,7 +22,13 @@ class ViewController: UIViewController {
     
     var timer = NSTimer()
     
-    var gameSound: SystemSoundID = 0
+    var startSound: SystemSoundID = 0
+    
+    //var gameSound: SystemSoundID = 0
+    var testSound: SystemSoundID = 0
+    var correctSound: SystemSoundID = 0     //correct
+    var incorrectSound: SystemSoundID = 0   //wrong and time's up
+    var dangerSound: SystemSoundID = 0      //time is running out
     
     var shuffled: [TriviaFact] = []
     
@@ -80,10 +86,14 @@ class ViewController: UIViewController {
         option4Button.layer.cornerRadius = 8
         nextButton.layer.cornerRadius = 8
         playAgainButton.layer.cornerRadius = 8
+        
+//        loadGameStartSound()
+//       playGameStartSound() //ANNOYING
+        
+        loadTestSound()
+        playTestSound()
+        
 
-        loadGameStartSound()
-        // Start game
-        //playGameStartSound() //ANNOYING
         
         //shuffles trivia array to guarantee the same question will not be asked more than once in a given playthru
         shuffled = shuffleQuiz(quiz)
@@ -256,14 +266,29 @@ class ViewController: UIViewController {
     }
     
     func loadGameStartSound() {
-        let pathToSoundFile = NSBundle.mainBundle().pathForResource("GameSound", ofType: "wav")
+        let pathToSoundFile = NSBundle.mainBundle().pathForResource("/sounds/GameSound", ofType: "wav")
+        
+        print("pathToSoundFile \(pathToSoundFile)")
+
         let soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
-        AudioServicesCreateSystemSoundID(soundURL, &gameSound)
+        AudioServicesCreateSystemSoundID(soundURL, &startSound)
     }
     
     func playGameStartSound() {
-        AudioServicesPlaySystemSound(gameSound)
+        AudioServicesPlaySystemSound(startSound)
     }
 
-}
+    func loadTestSound() {
+        let mypathToSoundFile = NSBundle.mainBundle().pathForResource("/sounds/Success", ofType: "wav")
+            
+        print("MYpathToSoundFile \(mypathToSoundFile)")
 
+        let mysoundURL = NSURL(fileURLWithPath: mypathToSoundFile!)
+        AudioServicesCreateSystemSoundID(mysoundURL, &testSound)
+    }
+    
+    func playTestSound() {
+        AudioServicesPlaySystemSound(testSound)
+    }
+    
+}
