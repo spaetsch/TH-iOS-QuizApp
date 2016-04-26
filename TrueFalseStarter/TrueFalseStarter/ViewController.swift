@@ -13,7 +13,7 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     let questionsPerRound = 4
-    let timeLimit = 15 // number of seconds
+    let timeLimit = 10 // number of seconds
     
     var questionsAsked = 0
     var correctQuestions = 0
@@ -22,9 +22,7 @@ class ViewController: UIViewController {
     
     var timer = NSTimer()
     
-    var correctSound: SystemSoundID = 0     //correct
-    var incorrectSound: SystemSoundID = 0   //wrong and time's up
-    var dangerSound: SystemSoundID = 0      //time is running out
+    var currSoundID: SystemSoundID = 0
     
     var shuffled: [TriviaFact] = []
     
@@ -101,6 +99,9 @@ class ViewController: UIViewController {
         timerCounter = timeLimit
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
+        loadSound("/sounds/Next", soundID: &currSoundID, type: "wav")
+        AudioServicesPlaySystemSound(currSoundID)
+        
         countdownLabel.text = String(timerCounter)
         questionField.text = currentFact.question
         
@@ -138,7 +139,16 @@ class ViewController: UIViewController {
         // Display play again button and total score
         playAgainButton.hidden = false
         
-        questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
+        if correctQuestions == 0 {
+            loadSound("/sounds/Honk", soundID: &currSoundID, type: "mp3")
+            AudioServicesPlaySystemSound(currSoundID)
+            questionField.text = "You got \(correctQuestions) out of \(questionsPerRound) correct. \nBetter luck next time!"
+        } else {
+            loadSound("/sounds/Achieve", soundID: &currSoundID, type: "wav")
+            AudioServicesPlaySystemSound(currSoundID)
+            questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
+
+        }
     }
     
     @IBAction func checkAnswer(sender: UIButton) {
@@ -156,12 +166,12 @@ class ViewController: UIViewController {
             correctQuestions += 1
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
-            loadSound("/sounds/Success", soundID: &correctSound, type: "wav")
-            AudioServicesPlaySystemSound(correctSound)
+            loadSound("/sounds/Success", soundID: &currSoundID, type: "wav")
+            AudioServicesPlaySystemSound(currSoundID)
         } else {
             feedbackField.textColor = UIColor.orangeColor()
-            loadSound("/sounds/Fail", soundID: &incorrectSound, type: "wav")
-            AudioServicesPlaySystemSound(incorrectSound)
+            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")
+            AudioServicesPlaySystemSound(currSoundID)
             switch correctAnswer{
                 case 1:
                     feedbackField.text = "Sorry! \(selectedFact.option1) is the correct answer."
@@ -241,14 +251,14 @@ class ViewController: UIViewController {
 
         if timerCounter == 0 {
             feedbackField.text = "Time's up!"
-            loadSound("/sounds/Fail", soundID: &incorrectSound, type: "wav")
-            AudioServicesPlaySystemSound(incorrectSound)
+            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")
+            AudioServicesPlaySystemSound(currSoundID)
             questionsAsked += 1
             stopTimer()
             enableOptions(false)
         } else if timerCounter == 5 {
-            loadSound("/sounds/Warning", soundID: &dangerSound, type: "wav")
-            AudioServicesPlaySystemSound(dangerSound)
+            loadSound("/sounds/Warning", soundID: &currSoundID, type: "wav")
+            AudioServicesPlaySystemSound(currSoundID)
             countdownLabel.textColor = UIColor.redColor()
         } else if timerCounter < 5{
             countdownLabel.textColor = UIColor.redColor()
@@ -268,5 +278,4 @@ class ViewController: UIViewController {
         let soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
         AudioServicesCreateSystemSoundID(soundURL, soundID)
     }
-    
 }
