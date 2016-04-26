@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  TrueFalseStarter
 //
-//  Created by Pasan Premaratne on 3/9/16.
-//  Copyright © 2016 Treehouse. All rights reserved.
+//  Created by Sarah Paetsch on 4/18/16.
+//  Copyright © 2016 Sarah Paetsch. All rights reserved.
 //
 
 import UIKit
@@ -13,7 +13,7 @@ import AudioToolbox
 class ViewController: UIViewController {
     
     let questionsPerRound = 4
-    let timeLimit = 10 // number of seconds
+    let timeLimit = 15   // number of seconds
     
     var questionsAsked = 0
     var correctQuestions = 0
@@ -58,8 +58,11 @@ class ViewController: UIViewController {
         TriviaFact(question:"The Titanic departed from the United Kingdom, where was it supposed to arrive?", option1: "Paris", option2: "Washington D.C.", option3: "New York City", option4:"Boston", correctAnswer: 3),
         TriviaFact(question:"Which nation produces the most oil?", option1:"Iran", option2:"Iraq", option3:"Brazil", option4: "Canada", correctAnswer: 4),
         TriviaFact(question:"Which country has most recently won consecutive World Cups in Soccer?", option1: "Italy", option2: "Brazil", option3: "Argentina", correctAnswer: 2),
-        TriviaFact(question:"Which of the following rivers is longest?", option1:"Yangtze", option2:"Mississippi", option3:"Congo", option4: "Mekong", correctAnswer: 2)
-    ]
+        TriviaFact(question:"Which of the following rivers is longest?", option1:"Yangtze", option2:"Mississippi", option3:"Congo", option4: "Mekong", correctAnswer: 2),
+        TriviaFact(question:"Which city is the oldest?", option1:"Mexico City", option2:"Cape Town", option3:"San Juan", option4: "Sydney", correctAnswer: 1),
+        TriviaFact(question:"Which country was the first to allow women to vote in national elections?", option1: "Poland", option2: "United States", option3: "Sweden", option4: "Senegal", correctAnswer: 1),
+        TriviaFact(question:"Which of these countries won the most medals in the 2012 Summer Games?", option1:"France", option2:"Germany", option3:"Japan", option4: "Great Britain", correctAnswer: 4)
+        ]
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
@@ -74,15 +77,14 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        option1Button.layer.cornerRadius = 8 // round button edges
+        option1Button.layer.cornerRadius = 8    // round button edges
         option2Button.layer.cornerRadius = 8
         option3Button.layer.cornerRadius = 8
         option4Button.layer.cornerRadius = 8
         nextButton.layer.cornerRadius = 8
         playAgainButton.layer.cornerRadius = 8
         
-        //shuffles trivia array to guarantee the same question will not be asked more than once in a given playthru
-        shuffled = shuffleQuiz(quiz)
+        shuffled = shuffleQuiz(quiz)            //Shuffles trivia array so that a question will not be asked more than once in a given playthru
         displayQuestion()
     }
 
@@ -92,14 +94,12 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-        // Selects currentFact from randomly shuffled array at the index equal to number of questions already asked
-        // Iterates thru the array and guarantees the same question will not be asked more than once in a given playthru
-        let currentFact = shuffled[questionsAsked]
-        
+        let currentFact = shuffled[questionsAsked] // Selects currentFact from randomly shuffled array at the index = # of questions asked
+
         timerCounter = timeLimit
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
-        loadSound("/sounds/Next", soundID: &currSoundID, type: "wav")
+        loadSound("/sounds/Next", soundID: &currSoundID, type: "wav")   //Loads and plays "new question" beep
         AudioServicesPlaySystemSound(currSoundID)
         
         countdownLabel.text = String(timerCounter)
@@ -140,11 +140,11 @@ class ViewController: UIViewController {
         playAgainButton.hidden = false
         
         if correctQuestions == 0 {
-            loadSound("/sounds/Honk", soundID: &currSoundID, type: "mp3")
+            loadSound("/sounds/Honk", soundID: &currSoundID, type: "mp3")     //Loads and plays "honk" for getting zero correct
             AudioServicesPlaySystemSound(currSoundID)
             questionField.text = "You got \(correctQuestions) out of \(questionsPerRound) correct. \nBetter luck next time!"
         } else {
-            loadSound("/sounds/Achieve", soundID: &currSoundID, type: "wav")
+            loadSound("/sounds/Achieve", soundID: &currSoundID, type: "wav")  //Loads and plays fanfare for achievement
             AudioServicesPlaySystemSound(currSoundID)
             questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
 
@@ -153,24 +153,20 @@ class ViewController: UIViewController {
     
     @IBAction func checkAnswer(sender: UIButton) {
         
-        // selectedFact is at the index equal to number of questions already asked
-        let selectedFact = shuffled[questionsAsked]
+        let selectedFact = shuffled[questionsAsked]     // selectedFact is at the index = # of questions asked
         let correctAnswer = selectedFact.correctAnswer
-
-        // Increment the questions asked counter AFTER getting the selectedFact
-        questionsAsked += 1
-
+        questionsAsked += 1                             // Increment the questions asked counter AFTER getting the selectedFact
         stopTimer()
         
         if (sender === option1Button &&  correctAnswer == 1) || (sender === option2Button && correctAnswer == 2) || (sender === option3Button && correctAnswer == 3) || (sender === option4Button && correctAnswer == 4){
             correctQuestions += 1
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
-            loadSound("/sounds/Success", soundID: &currSoundID, type: "wav")
+            loadSound("/sounds/Success", soundID: &currSoundID, type: "wav")    //Loads and plays "correct answer" sound
             AudioServicesPlaySystemSound(currSoundID)
         } else {
             feedbackField.textColor = UIColor.orangeColor()
-            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")
+            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound
             AudioServicesPlaySystemSound(currSoundID)
             switch correctAnswer{
                 case 1:
@@ -225,7 +221,8 @@ class ViewController: UIViewController {
     }
 
     // Toggles between the states where
-    // options are enabled and nextButton is disabled vs. options disabled and nextButton enabled
+    // options are enabled and nextButton is disabled 
+    // vs. options disabled and nextButton enabled
     func enableOptions(toggle: Bool) {
         if toggle {
             option1Button.enabled = true
@@ -251,13 +248,14 @@ class ViewController: UIViewController {
 
         if timerCounter == 0 {
             feedbackField.text = "Time's up!"
-            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")
+            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound when time runs out
             AudioServicesPlaySystemSound(currSoundID)
             questionsAsked += 1
             stopTimer()
             enableOptions(false)
         } else if timerCounter == 5 {
-            loadSound("/sounds/Warning", soundID: &currSoundID, type: "wav")
+            loadSound("/sounds/Warning", soundID: &currSoundID, type: "wav")    //Loads and plays "warning" sound when countdown reaches 5 sec remaining
+
             AudioServicesPlaySystemSound(currSoundID)
             countdownLabel.textColor = UIColor.redColor()
         } else if timerCounter < 5{
@@ -273,6 +271,7 @@ class ViewController: UIViewController {
         timerCounter = timeLimit
     }
     
+    // Loads sound file at given path of given file type
     func loadSound(path:String, soundID: UnsafeMutablePointer<SystemSoundID>, type:String){
         let pathToSoundFile = NSBundle.mainBundle().pathForResource(path, ofType: type)
         let soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
