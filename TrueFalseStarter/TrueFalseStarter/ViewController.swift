@@ -22,10 +22,6 @@ class ViewController: UIViewController {
     
     var timer = NSTimer()
     
-    var startSound: SystemSoundID = 0
-    
-    //var gameSound: SystemSoundID = 0
-    var testSound: SystemSoundID = 0
     var correctSound: SystemSoundID = 0     //correct
     var incorrectSound: SystemSoundID = 0   //wrong and time's up
     var dangerSound: SystemSoundID = 0      //time is running out
@@ -86,14 +82,6 @@ class ViewController: UIViewController {
         option4Button.layer.cornerRadius = 8
         nextButton.layer.cornerRadius = 8
         playAgainButton.layer.cornerRadius = 8
-        
-//        loadGameStartSound()
-//       playGameStartSound() //ANNOYING
-        
-        loadTestSound()
-        playTestSound()
-        
-
         
         //shuffles trivia array to guarantee the same question will not be asked more than once in a given playthru
         shuffled = shuffleQuiz(quiz)
@@ -168,8 +156,12 @@ class ViewController: UIViewController {
             correctQuestions += 1
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
+            loadSound("/sounds/Success", soundID: &correctSound, type: "wav")
+            AudioServicesPlaySystemSound(correctSound)
         } else {
             feedbackField.textColor = UIColor.orangeColor()
+            loadSound("/sounds/Fail", soundID: &incorrectSound, type: "wav")
+            AudioServicesPlaySystemSound(incorrectSound)
             switch correctAnswer{
                 case 1:
                     feedbackField.text = "Sorry! \(selectedFact.option1) is the correct answer."
@@ -249,10 +241,16 @@ class ViewController: UIViewController {
 
         if timerCounter == 0 {
             feedbackField.text = "Time's up!"
+            loadSound("/sounds/Fail", soundID: &incorrectSound, type: "wav")
+            AudioServicesPlaySystemSound(incorrectSound)
             questionsAsked += 1
             stopTimer()
             enableOptions(false)
-        } else if timerCounter <= 5 {
+        } else if timerCounter == 5 {
+            loadSound("/sounds/Warning", soundID: &dangerSound, type: "wav")
+            AudioServicesPlaySystemSound(dangerSound)
+            countdownLabel.textColor = UIColor.redColor()
+        } else if timerCounter < 5{
             countdownLabel.textColor = UIColor.redColor()
         }
     
@@ -265,30 +263,10 @@ class ViewController: UIViewController {
         timerCounter = timeLimit
     }
     
-    func loadGameStartSound() {
-        let pathToSoundFile = NSBundle.mainBundle().pathForResource("/sounds/GameSound", ofType: "wav")
-        
-        print("pathToSoundFile \(pathToSoundFile)")
-
+    func loadSound(path:String, soundID: UnsafeMutablePointer<SystemSoundID>, type:String){
+        let pathToSoundFile = NSBundle.mainBundle().pathForResource(path, ofType: type)
         let soundURL = NSURL(fileURLWithPath: pathToSoundFile!)
-        AudioServicesCreateSystemSoundID(soundURL, &startSound)
-    }
-    
-    func playGameStartSound() {
-        AudioServicesPlaySystemSound(startSound)
-    }
-
-    func loadTestSound() {
-        let mypathToSoundFile = NSBundle.mainBundle().pathForResource("/sounds/Success", ofType: "wav")
-            
-        print("MYpathToSoundFile \(mypathToSoundFile)")
-
-        let mysoundURL = NSURL(fileURLWithPath: mypathToSoundFile!)
-        AudioServicesCreateSystemSoundID(mysoundURL, &testSound)
-    }
-    
-    func playTestSound() {
-        AudioServicesPlaySystemSound(testSound)
+        AudioServicesCreateSystemSoundID(soundURL, soundID)
     }
     
 }
