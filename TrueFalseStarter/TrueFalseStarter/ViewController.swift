@@ -9,6 +9,7 @@
 import UIKit
 import GameKit
 import AudioToolbox
+import TriviaFact
 
 class ViewController: UIViewController {
     
@@ -26,31 +27,6 @@ class ViewController: UIViewController {
     
     var shuffled: [TriviaFact] = []
     
-    class TriviaFact {
-        var question: String
-        var option1: String
-        var option2: String
-        var option3: String
-        var option4: String?
-        var correctAnswer: Int
-        
-        init(question: String, option1: String, option2: String, option3: String, correctAnswer: Int){
-            self.question = question
-            self.option1 = option1
-            self.option2 = option2
-            self.option3 = option3
-            self.correctAnswer = correctAnswer
-        }
-        init(question: String, option1: String, option2: String, option3: String, option4: String, correctAnswer: Int){
-            self.question = question
-            self.option1 = option1
-            self.option2 = option2
-            self.option3 = option3
-            self.option4 = option4
-            self.correctAnswer = correctAnswer
-        }
-    }
-    
     let quiz: [TriviaFact] = [
         TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
         TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", correctAnswer: 1),
@@ -62,7 +38,7 @@ class ViewController: UIViewController {
         TriviaFact(question:"Which city is the oldest?", option1:"Mexico City", option2:"Cape Town", option3:"San Juan", option4: "Sydney", correctAnswer: 1),
         TriviaFact(question:"Which country was the first to allow women to vote in national elections?", option1: "Poland", option2: "United States", option3: "Sweden", option4: "Senegal", correctAnswer: 1),
         TriviaFact(question:"Which of these countries won the most medals in the 2012 Summer Games?", option1:"France", option2:"Germany", option3:"Japan", option4: "Great Britain", correctAnswer: 4)
-        ]
+    ]
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
