@@ -9,12 +9,20 @@
 import UIKit
 import GameKit
 import AudioToolbox
-import TriviaFact
 
 class ViewController: UIViewController {
     
     let questionsPerRound = 4
-    let timeLimit = 15   // number of seconds
+    let timeLimit = 15          // number of seconds
+    let buttonCorners: CGFloat = 8
+    
+    // path and filenames for sound files
+    let soundNext = "/sounds/Next"
+    let soundHonk = "/sounds/Honk"
+    let soundAchieve = "/sounds/Achieve"
+    let soundSuccess = "/sounds/Success"
+    let soundFail = "/sounds/Fail"
+    let soundWarning = "/sounds/Warning"
     
     var questionsAsked = 0
     var correctQuestions = 0
@@ -25,20 +33,7 @@ class ViewController: UIViewController {
     
     var currSoundID: SystemSoundID = 0
     
-    var shuffled: [TriviaFact] = []
-    
-    let quiz: [TriviaFact] = [
-        TriviaFact(question: "This was the only US President to serve more than two consecutive terms.", option1: "George Washington", option2: "Franklin D. Roosevelt", option3: "Woodrow Wilson", option4: "Andrew Jackson", correctAnswer: 2 ),
-        TriviaFact(question:"Which of the following countries has the most residents?", option1: "Nigeria", option2: "Russia", option3: "Iran", correctAnswer: 1),
-        TriviaFact(question:"In what year was the United Nations founded?", option1:"1918", option2:"1919", option3:"1945", option4: "1954", correctAnswer: 3),
-        TriviaFact(question:"The Titanic departed from the United Kingdom, where was it supposed to arrive?", option1: "Paris", option2: "Washington D.C.", option3: "New York City", option4:"Boston", correctAnswer: 3),
-        TriviaFact(question:"Which nation produces the most oil?", option1:"Iran", option2:"Iraq", option3:"Brazil", option4: "Canada", correctAnswer: 4),
-        TriviaFact(question:"Which country has most recently won consecutive World Cups in Soccer?", option1: "Italy", option2: "Brazil", option3: "Argentina", correctAnswer: 2),
-        TriviaFact(question:"Which of the following rivers is longest?", option1:"Yangtze", option2:"Mississippi", option3:"Congo", option4: "Mekong", correctAnswer: 2),
-        TriviaFact(question:"Which city is the oldest?", option1:"Mexico City", option2:"Cape Town", option3:"San Juan", option4: "Sydney", correctAnswer: 1),
-        TriviaFact(question:"Which country was the first to allow women to vote in national elections?", option1: "Poland", option2: "United States", option3: "Sweden", option4: "Senegal", correctAnswer: 1),
-        TriviaFact(question:"Which of these countries won the most medals in the 2012 Summer Games?", option1:"France", option2:"Germany", option3:"Japan", option4: "Great Britain", correctAnswer: 4)
-    ]
+    var shuffled = Quiz(facts:[])
     
     @IBOutlet weak var questionField: UILabel!
     @IBOutlet weak var feedbackField: UILabel!
@@ -53,14 +48,14 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        option1Button.layer.cornerRadius = 8    // round button edges
-        option2Button.layer.cornerRadius = 8
-        option3Button.layer.cornerRadius = 8
-        option4Button.layer.cornerRadius = 8
-        nextButton.layer.cornerRadius = 8
-        playAgainButton.layer.cornerRadius = 8
+        option1Button.layer.cornerRadius = buttonCorners    // round button edges
+        option2Button.layer.cornerRadius = buttonCorners
+        option3Button.layer.cornerRadius = buttonCorners
+        option4Button.layer.cornerRadius = buttonCorners
+        nextButton.layer.cornerRadius = buttonCorners
+        playAgainButton.layer.cornerRadius = buttonCorners
         
-        shuffled = shuffleQuiz(quiz)            //Shuffles trivia array so that a question will not be asked more than once in a given playthru
+        shuffled = shuffleQuiz(Quiz())            //Shuffles trivia array so that a question will not be asked more than once in a given playthru
         displayQuestion()
     }
 
@@ -70,12 +65,12 @@ class ViewController: UIViewController {
     }
     
     func displayQuestion() {
-        let currentFact = shuffled[questionsAsked] // Selects currentFact from randomly shuffled array at the index = # of questions asked
+        let currentFact = shuffled.questions[questionsAsked] // Selects currentFact from randomly shuffled array at the index = # of questions asked
 
         timerCounter = timeLimit
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
-        loadSound("/sounds/Next", soundID: &currSoundID, type: "wav")   //Loads and plays "new question" beep
+        loadSound(soundNext, soundID: &currSoundID, type: "wav")   //Loads and plays "new question" beep
         AudioServicesPlaySystemSound(currSoundID)
         
         countdownLabel.text = String(timerCounter)
@@ -116,11 +111,11 @@ class ViewController: UIViewController {
         playAgainButton.hidden = false
         
         if correctQuestions == 0 {
-            loadSound("/sounds/Honk", soundID: &currSoundID, type: "mp3")     //Loads and plays "honk" for getting zero correct
+            loadSound(soundHonk, soundID: &currSoundID, type: "mp3")     //Loads and plays "honk" for getting zero correct
             AudioServicesPlaySystemSound(currSoundID)
             questionField.text = "You got \(correctQuestions) out of \(questionsPerRound) correct. \nBetter luck next time!"
         } else {
-            loadSound("/sounds/Achieve", soundID: &currSoundID, type: "wav")  //Loads and plays fanfare for achievement
+            loadSound(soundAchieve, soundID: &currSoundID, type: "wav")  //Loads and plays fanfare for achievement
             AudioServicesPlaySystemSound(currSoundID)
             questionField.text = "Way to go!\nYou got \(correctQuestions) out of \(questionsPerRound) correct!"
 
@@ -129,7 +124,7 @@ class ViewController: UIViewController {
     
     @IBAction func checkAnswer(sender: UIButton) {
         
-        let selectedFact = shuffled[questionsAsked]     // selectedFact is at the index = # of questions asked
+        let selectedFact = shuffled.questions[questionsAsked]     // selectedFact is at the index = # of questions asked
         let correctAnswer = selectedFact.correctAnswer
         questionsAsked += 1                             // Increment the questions asked counter AFTER getting the selectedFact
         stopTimer()
@@ -138,11 +133,11 @@ class ViewController: UIViewController {
             correctQuestions += 1
             feedbackField.textColor = UIColor.greenColor()
             feedbackField.text = "Correct!"
-            loadSound("/sounds/Success", soundID: &currSoundID, type: "wav")    //Loads and plays "correct answer" sound
+            loadSound(soundSuccess, soundID: &currSoundID, type: "wav")    //Loads and plays "correct answer" sound
             AudioServicesPlaySystemSound(currSoundID)
         } else {
             feedbackField.textColor = UIColor.orangeColor()
-            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound
+            loadSound(soundFail, soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound
             AudioServicesPlaySystemSound(currSoundID)
             switch correctAnswer{
                 case 1:
@@ -184,7 +179,7 @@ class ViewController: UIViewController {
         correctQuestions = 0
         
         // Create a new randomly shuffled array so the player will not get the same series of questions
-        shuffled = shuffleQuiz(quiz)
+        shuffled = shuffleQuiz(Quiz())
         nextRound(self)
     }
     
@@ -192,8 +187,8 @@ class ViewController: UIViewController {
     
     // Takes the original array of trivia questions, returns a randomly shuffled array
     // Guarantees no question will be repeated in a given playthru
-    func shuffleQuiz(original: [TriviaFact]) -> [TriviaFact]{
-        return GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original) as! [TriviaFact]
+    func shuffleQuiz(original: Quiz) -> Quiz{
+        return Quiz(facts: GKRandomSource.sharedRandom().arrayByShufflingObjectsInArray(original.questions) as! [TriviaFact])
     }
 
     // Toggles between the states where
@@ -224,13 +219,13 @@ class ViewController: UIViewController {
 
         if timerCounter == 0 {
             feedbackField.text = "Time's up!"
-            loadSound("/sounds/Fail", soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound when time runs out
+            loadSound(soundFail, soundID: &currSoundID, type: "wav")       //Loads and plays "incorrect answer" sound when time runs out
             AudioServicesPlaySystemSound(currSoundID)
             questionsAsked += 1
             stopTimer()
             enableOptions(false)
         } else if timerCounter == 5 {
-            loadSound("/sounds/Warning", soundID: &currSoundID, type: "wav")    //Loads and plays "warning" sound when countdown reaches 5 sec remaining
+            loadSound(soundWarning, soundID: &currSoundID, type: "wav")    //Loads and plays "warning" sound when countdown reaches 5 sec remaining
 
             AudioServicesPlaySystemSound(currSoundID)
             countdownLabel.textColor = UIColor.redColor()
